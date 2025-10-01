@@ -1,9 +1,6 @@
 import org.example.CompressArray;
-import org.example.IntArraySorter;
-import org.example.QuickSort;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class CompressTest {

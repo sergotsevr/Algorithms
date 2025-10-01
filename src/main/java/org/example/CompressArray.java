@@ -8,7 +8,6 @@ public class CompressArray {
         if (array == null || array.length == 0){
             return "";
         }
-        System.out.println(1012321 % 10);
         Arrays.sort(array);
         StringBuilder sb = new StringBuilder();
         int beginNumber = array[0];
