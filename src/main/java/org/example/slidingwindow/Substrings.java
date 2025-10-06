@@ -87,4 +87,30 @@ public class Substrings {
         }
         return maxWindowSize;
     }
+
+    public static int longestWindowWithUniqueSubstringsMaxKCharAlt(String s, int k) {
+        Map<Character, Integer> currWindow = new HashMap<>();
+        int leftPointer = 0;
+        int maxWindowSize = 0;
+        for (int rp = 0; rp < s.length(); rp++) {
+            if (currWindow.containsKey(s.charAt(rp))) {
+                currWindow.put(s.charAt(rp), currWindow.get(s.charAt(rp)) + 1);
+                maxWindowSize = Math.max(maxWindowSize, rp - leftPointer + 1);
+            } else {
+
+                currWindow.put(s.charAt(rp), 1);
+                while (currWindow.size() > k) {
+                    if (currWindow.get(s.charAt(leftPointer)) > 1) {
+                        currWindow.put(s.charAt(leftPointer), currWindow.get(s.charAt(leftPointer)) - 1);
+                        leftPointer++;
+                    } else {
+                        currWindow.remove(s.charAt(leftPointer));
+                        leftPointer++;
+                    }
+                }
+                maxWindowSize = Math.max(maxWindowSize, rp - leftPointer + 1);
+            }
+        }
+        return maxWindowSize;
+    }
 }

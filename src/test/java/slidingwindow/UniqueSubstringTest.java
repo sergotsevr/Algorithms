@@ -42,4 +42,11 @@ public class UniqueSubstringTest {
         int longestWindowWithUniqueSubstrings = Substrings.longestWindowWithUniqueSubstringsMaxTwoCharAlt(test);
         assertEquals(7, longestWindowWithUniqueSubstrings);
     }
+
+    @Test
+    public void givenString_whenLongestWindowWithUniqueSubstringsMaxKCharAlt_thenReturnMaxWindowSize() {
+        String test = "avvaaababajk";
+        int longestWindowWithUniqueSubstrings = Substrings.longestWindowWithUniqueSubstringsMaxKCharAlt(test, 3);
+        assertEquals(10, longestWindowWithUniqueSubstrings);
+    }
 }
