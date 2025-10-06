@@ -16,7 +16,7 @@ public class Substrings {
             } else {
                 map.put(s.charAt(i), 1);
             }
-            if (i > (slidingWindowSize-1)){
+            if (i > (slidingWindowSize - 1)) {
                 int j = i - slidingWindowSize;
                 if (map.get(s.charAt(j)) > 1) {
                     map.put(s.charAt(j), map.get(s.charAt(j)) - 1);
@@ -24,7 +24,7 @@ public class Substrings {
                     map.remove(s.charAt(j));
                 }
             }
-            if (slidingWindowSize.equals(map.size())){
+            if (slidingWindowSize.equals(map.size())) {
                 substringCount++;
             }
         }
@@ -34,10 +34,10 @@ public class Substrings {
     public static int longestWindowWithUniqueSubstrings(String s) {
         Integer maxSize = 0;
         int counter = 0;
-        while (maxSize.equals(0)){
-           if (findUniqueSubstring(s, (s.length()-counter)) > 0){
-               maxSize = s.length()-counter;
-           }
+        while (maxSize.equals(0)) {
+            if (findUniqueSubstring(s, (s.length() - counter)) > 0) {
+                maxSize = s.length() - counter;
+            }
             counter++;
         }
         return maxSize;
@@ -49,14 +49,40 @@ public class Substrings {
         int leftPointer = 0;
         int rightPointer = 0;
         int maxWindowSize = 0;
-        while (rightPointer < s.length()){
-            if (!currWindow.contains(s.charAt(rightPointer))){
+        while (rightPointer < s.length()) {
+            if (!currWindow.contains(s.charAt(rightPointer))) {
                 currWindow.add(s.charAt(rightPointer));
                 maxWindowSize = Math.max(maxWindowSize, rightPointer - leftPointer + 1);
                 rightPointer++;
             } else {
                 currWindow.remove(s.charAt(leftPointer));
                 leftPointer++;
+            }
+        }
+        return maxWindowSize;
+    }
+
+    public static int longestWindowWithUniqueSubstringsMaxTwoCharAlt(String s) {
+        Map<Character, Integer> currWindow = new HashMap<>();
+        int leftPointer = 0;
+        int maxWindowSize = 0;
+        for (int rp = 0; rp < s.length(); rp++) {
+            if (currWindow.containsKey(s.charAt(rp))) {
+                currWindow.put(s.charAt(rp), currWindow.get(s.charAt(rp)) + 1);
+                maxWindowSize = Math.max(maxWindowSize, rp - leftPointer + 1);
+            } else {
+
+                currWindow.put(s.charAt(rp), 1);
+                while (currWindow.size() > 2) {
+                    if (currWindow.get(s.charAt(leftPointer)) > 1) {
+                        currWindow.put(s.charAt(leftPointer), currWindow.get(s.charAt(leftPointer)) - 1);
+                        leftPointer++;
+                    } else {
+                        currWindow.remove(s.charAt(leftPointer));
+                        leftPointer++;
+                    }
+                }
+                maxWindowSize = Math.max(maxWindowSize, rp - leftPointer + 1);
             }
         }
         return maxWindowSize;
