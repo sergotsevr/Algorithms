@@ -1,7 +1,9 @@
 package org.example.slidingwindow;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Substrings {
 
@@ -39,5 +41,24 @@ public class Substrings {
             counter++;
         }
         return maxSize;
+    }
+
+
+    public static int longestWindowWithUniqueSubstringsAlt(String s) {
+        Set<Character> currWindow = new HashSet<>();
+        int leftPointer = 0;
+        int rightPointer = 0;
+        int maxWindowSize = 0;
+        while (rightPointer < s.length()){
+            if (!currWindow.contains(s.charAt(rightPointer))){
+                currWindow.add(s.charAt(rightPointer));
+                maxWindowSize = Math.max(maxWindowSize, rightPointer - leftPointer + 1);
+                rightPointer++;
+            } else {
+                currWindow.remove(s.charAt(leftPointer));
+                leftPointer++;
+            }
+        }
+        return maxWindowSize;
     }
 }
