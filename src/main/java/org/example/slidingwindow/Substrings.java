@@ -7,7 +7,7 @@ public class Substrings {
 
     public static int findUniqueSubstring(String s, Integer slidingWindowSize) {
         Map<Character, Integer> map = new HashMap<>();
-        Integer substringCount = 0;
+        int substringCount = 0;
         for (int i = 0; i < s.length(); i++) {
             if (map.containsKey(s.charAt(i))) {
                 map.put(s.charAt(i), map.get(s.charAt(i)) + 1);
@@ -27,5 +27,17 @@ public class Substrings {
             }
         }
         return substringCount;
+    }
+
+    public static int longestWindowWithUniqueSubstrings(String s) {
+        Integer maxSize = 0;
+        int counter = 0;
+        while (maxSize.equals(0)){
+           if (findUniqueSubstring(s, (s.length()-counter)) > 0){
+               maxSize = s.length()-counter;
+           }
+            counter++;
+        }
+        return maxSize;
     }
 }
