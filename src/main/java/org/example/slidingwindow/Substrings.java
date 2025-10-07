@@ -1,5 +1,8 @@
 package org.example.slidingwindow;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -112,5 +115,69 @@ public class Substrings {
             }
         }
         return maxWindowSize;
+    }
+
+
+    public static String minWindow(String s, String t) {
+
+        Map<Character, Integer> map = new HashMap<>();
+        int size = 0;
+        int curSize = 0;
+        Pair<Integer, Integer> res = new Pair<>(0, Integer.MAX_VALUE);
+        for (int i = 0; i < t.length(); i++) {
+            if (!map.containsKey(t.charAt(i))) {
+                map.put(t.charAt(i), 1);
+            } else {
+                map.put(t.charAt(i), map.get(t.charAt(i)) + 1);
+            }
+            size++;
+        }
+
+        int lp = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (map.containsKey(s.charAt(i))) {
+                map.put(s.charAt(i), map.get(s.charAt(i)) - 1);
+                if (map.get(s.charAt(i)) == 0) {
+                    curSize++;
+                }
+            }
+            while (curSize == map.size()) {
+                int windowCurSize = i - lp;
+                int prevSize = res.getSecond() - res.getFirst();
+                if (windowCurSize < prevSize) {
+                    res.setFirst(lp);
+                    res.setSecond(i);
+                }
+                if (map.containsKey(s.charAt(lp))) {
+                    if (map.get(s.charAt(lp)) == 0) {
+                        curSize--;
+                    }
+                    map.put(s.charAt(lp), map.get(s.charAt(lp)) + 1);
+
+                }
+                lp++;
+            }
+
+        }
+        return s.substring(res.getFirst(), res.getSecond() + 1);
+    }
+
+    @Setter
+    @Getter
+    static class Pair<K, V> {
+        private K first;
+        private V second;
+
+        public Pair(K first, V second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+
+
+    private static boolean isMapValuesAllZero(Map<Character, Integer> map) {
+        return map.values()
+                .stream()
+                .anyMatch(v -> !Integer.valueOf(0).equals(v));
     }
 }
