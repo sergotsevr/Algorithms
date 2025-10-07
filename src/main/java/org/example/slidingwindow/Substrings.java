@@ -121,7 +121,6 @@ public class Substrings {
     public static String minWindow(String s, String t) {
 
         Map<Character, Integer> map = new HashMap<>();
-        int size = 0;
         int curSize = 0;
         Pair<Integer, Integer> res = new Pair<>(0, Integer.MAX_VALUE);
         for (int i = 0; i < t.length(); i++) {
@@ -130,7 +129,6 @@ public class Substrings {
             } else {
                 map.put(t.charAt(i), map.get(t.charAt(i)) + 1);
             }
-            size++;
         }
 
         int lp = 0;
@@ -175,9 +173,86 @@ public class Substrings {
     }
 
 
-    private static boolean isMapValuesAllZero(Map<Character, Integer> map) {
-        return map.values()
-                .stream()
-                .anyMatch(v -> !Integer.valueOf(0).equals(v));
+    @Setter
+    @Getter
+    static class IntPair extends Pair<Integer, Integer> {
+
+
+        public IntPair(Integer first, Integer second) {
+            super(first, second);
+        }
+        public Integer getSize(){
+            return getSecond() - getFirst();
+        }
+    }
+
+
+    public static String longestPalindrome(String s) {
+
+
+        IntPair res = new IntPair(0, 0);
+        for (int lp = 0; lp < s.length(); lp++) {
+            for (int rp = lp; rp < s.length(); rp++) {
+                if (s.substring(lp,rp+1).contentEquals(new StringBuilder(s.substring(lp,rp+1)).reverse())
+                        && res.getSize() < rp - lp){
+                    res.setFirst(lp);
+                    res.setSecond(rp);
+                }
+            }
+        }
+        return s.substring(res.getFirst(), res.getSecond() + 1);
+    }
+
+    public static String longestPalindromeManaker(String s) {
+        if (s == null || s.isEmpty()) return "";
+
+        // Преобразуем строку для обработки четных и нечетных палиндромов
+        String T = preprocess(s);
+        int n = T.length();
+        int[] P = new int[n];
+        int C = 0, R = 0;
+
+        for (int i = 1; i < n - 1; i++) {
+            int mirror = 2 * C - i;
+
+            if (i < R) {
+                P[i] = Math.min(R - i, P[mirror]);
+            }
+
+            // Пытаемся расширить палиндром
+            while (T.charAt(i + 1 + P[i]) == T.charAt(i - 1 - P[i])) {
+                P[i]++;
+            }
+
+            // Если палиндром расширился за R, обновляем центр и радиус
+            if (i + P[i] > R) {
+                C = i;
+                R = i + P[i];
+            }
+        }
+
+        // Находим максимальный палиндром
+        int maxLen = 0;
+        int centerIndex = 0;
+        for (int i = 1; i < n - 1; i++) {
+            if (P[i] > maxLen) {
+                maxLen = P[i];
+                centerIndex = i;
+            }
+        }
+
+        int start = (centerIndex - maxLen) / 2;
+        return s.substring(start, start + maxLen);
+    }
+
+    private static String preprocess(String s) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('^');
+        for (int i = 0; i < s.length(); i++) {
+            sb.append('#');
+            sb.append(s.charAt(i));
+        }
+        sb.append("#$");
+        return sb.toString();
     }
 }
