@@ -7,13 +7,13 @@ public class ZigZagPatternString {
 
 
     public String convert(String s, int numRows) {
+        if(numRows <= 1) return s;
         StringBuilder sb = new StringBuilder();
-        Map<Integer, StringBuilder> map = new HashMap<Integer, StringBuilder>();
+        Map<Integer, StringBuilder> map = new HashMap<>();
 
         int prevPeak = 0;
-        int nextPeak = 0;
+        int nextPeak;
         int currChar = 0;
-        int minusCoef = 0;
         int currNumber = 0;
         while (currChar < s.length()) {
             nextPeak = prevPeak + (2 * numRows - 2);
@@ -32,7 +32,6 @@ public class ZigZagPatternString {
                 }
                 currChar++;
             }
-            minusCoef = prevPeak + (2 * numRows - 2);
             prevPeak = nextPeak;
         }
         for (Map.Entry<Integer, StringBuilder> entry : map.entrySet()) {
